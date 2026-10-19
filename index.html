@@ -1,0 +1,469 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>K-스페이스 브리핑</title>
+<style>
+  :root{
+    --ink:#12141c;
+    --paper:#f5f3ee;
+    --accent:#ff5b2e;
+    --steel:#3e6ae1;
+    --moss:#178f7e;
+    --violet:#7c5cf0;
+    --nova:#c6881f;
+
+    --bg:var(--paper);
+    --surface:#ffffff;
+    --surface-2:#ece9e1;
+    --border:#ddd8cc;
+    --text:#1a1c22;
+    --text-dim:#5b5b57;
+    --text-faint:#8b8a82;
+    --rail-gov:var(--steel);
+    --rail-corp:var(--moss);
+    --rail-rnd:var(--violet);
+    --rail-news:var(--accent);
+    --rail-global:var(--nova);
+    --tile-bg:#ffffff;
+    --shadow:0 1px 2px rgba(20,18,10,.06),0 8px 24px -16px rgba(20,18,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:var(--ink);
+      --surface:#191c26;
+      --surface-2:#20232f;
+      --border:#2b2f3d;
+      --text:#eeeef2;
+      --text-dim:#a6a8b5;
+      --text-faint:#767a8a;
+      --tile-bg:#191c26;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -18px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:var(--ink);
+    --surface:#191c26;
+    --surface-2:#20232f;
+    --border:#2b2f3d;
+    --text:#eeeef2;
+    --text-dim:#a6a8b5;
+    --text-faint:#767a8a;
+    --tile-bg:#191c26;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -18px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans KR","IBM Plex Sans",-apple-system,sans-serif;
+    padding-inline:20px;
+    padding-block:28px 60px;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+
+  .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;}
+
+  /* ---------- header ---------- */
+  header{
+    position:relative;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    padding-bottom:22px;
+    margin-bottom:26px;
+    border-bottom:1px solid var(--border);
+  }
+  .header-art{
+    position:absolute;
+    top:0;
+    right:0;
+    width:300px;
+    height:100%;
+    min-height:100px;
+    color:var(--text-faint);
+    z-index:-1;
+    pointer-events:none;
+    -webkit-mask-image:linear-gradient(to left, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 100%);
+    mask-image:linear-gradient(to left, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 100%);
+  }
+  .header-art svg{display:block;width:100%;height:100%;}
+  @media (max-width:640px){
+    .header-art{display:none;}
+  }
+  .brand{display:flex;flex-direction:column;gap:6px;}
+  .brand .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+  }
+  .brand h1{
+    font-family:"Big Shoulders Display","IBM Plex Sans KR",sans-serif;
+    font-weight:700;
+    font-size:clamp(30px,5vw,44px);
+    line-height:1;
+    margin:0;
+    letter-spacing:.01em;
+  }
+  .brand h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .brand .sub{color:var(--text-dim);font-size:14.5px;max-width:52ch;}
+
+  .status{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+    font-family:"IBM Plex Mono",monospace;
+  }
+  .live-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:5px 11px;
+    border-radius:99px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    font-size:11.5px;
+    letter-spacing:.06em;
+    color:var(--text-dim);
+  }
+  .live-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--moss);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--moss) 25%, transparent);
+  }
+  .status .date{font-size:13px;color:var(--text-faint);}
+
+  /* ---------- stat strip ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:34px;
+  }
+  .tile{
+    background:var(--tile-bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    box-shadow:var(--shadow);
+  }
+  .tile .num{
+    font-family:"Big Shoulders Display",sans-serif;
+    font-weight:700;
+    font-size:32px;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .tile .num.accent{color:var(--accent);}
+  .tile .label{
+    margin-top:6px;
+    font-size:12px;
+    color:var(--text-dim);
+    letter-spacing:.02em;
+  }
+  .tile .label b{color:var(--text);font-weight:600;}
+
+  /* ---------- section ---------- */
+  section.cat{margin-bottom:34px;}
+  .cat-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .cat-rail{width:5px;height:20px;border-radius:3px;flex:none;}
+  .cat-head h2{
+    font-size:16.5px;
+    font-weight:700;
+    margin:0;
+    flex:none;
+  }
+  .cat-count{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    color:var(--text-faint);
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:99px;
+    padding:2px 9px;
+  }
+  .cat-desc{
+    font-size:12.5px;
+    color:var(--text-faint);
+    margin-left:auto;
+    text-align:right;
+  }
+
+  .cards{display:flex;flex-direction:column;gap:10px;}
+  .card{
+    display:block;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:3px solid var(--rail, var(--border));
+    border-radius:8px;
+    padding:13px 16px;
+    text-decoration:none;
+    color:inherit;
+    box-shadow:var(--shadow);
+    transition:transform .12s ease, border-color .12s ease;
+  }
+  .card:hover{transform:translateY(-1px);border-color:var(--rail, var(--border));}
+  .card .meta{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    color:var(--text-faint);
+    margin-bottom:5px;
+    letter-spacing:.02em;
+  }
+  .card .meta .src{color:var(--text-dim);font-weight:600;}
+  .card h3{
+    margin:0 0 4px;
+    font-size:15px;
+    font-weight:600;
+    line-height:1.4;
+  }
+  .card p{
+    margin:0;
+    font-size:13px;
+    color:var(--text-dim);
+    line-height:1.55;
+  }
+
+  .cat.gov .cards .card{--rail:var(--rail-gov);}
+  .cat.corp .cards .card{--rail:var(--rail-corp);}
+  .cat.rnd .cards .card{--rail:var(--rail-rnd);}
+  .cat.news .cards .card{--rail:var(--rail-news);}
+  .cat.global .cards .card{--rail:var(--rail-global);}
+
+  footer{
+    margin-top:40px;
+    padding-top:18px;
+    border-top:1px solid var(--border);
+    font-size:12px;
+    color:var(--text-faint);
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+    justify-content:space-between;
+  }
+  footer .tag{
+    font-family:"IBM Plex Mono",monospace;
+  }
+
+  @media (max-width:640px){
+    .stats{grid-template-columns:repeat(2,1fr);}
+    header{align-items:flex-start;}
+    .status{align-items:flex-start;}
+    .cat-desc{display:none;}
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="wrap">
+
+  <header>
+    <div class="header-art" aria-hidden="true">
+      <svg viewBox="0 0 280 120" role="img" aria-label="궤도를 도는 인공위성과 상승하는 로켓 장식 그래픽" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="165" cy="58" rx="100" ry="36" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 6" opacity="0.5" transform="rotate(-9 165 58)"/>
+        <circle cx="28" cy="14" r="1.4" fill="currentColor" opacity="0.6"/>
+        <circle cx="55" cy="40" r="1.1" fill="currentColor" opacity="0.5"/>
+        <circle cx="95" cy="12" r="1.5" fill="currentColor" opacity="0.65"/>
+        <circle cx="210" cy="16" r="1.3" fill="currentColor" opacity="0.55"/>
+        <circle cx="255" cy="46" r="1.5" fill="currentColor" opacity="0.6"/>
+        <circle cx="18" cy="85" r="1.2" fill="currentColor" opacity="0.5"/>
+        <circle cx="130" cy="100" r="1.3" fill="currentColor" opacity="0.45"/>
+        <g transform="translate(232,36) rotate(16)" opacity="0.8">
+          <rect x="-6" y="-4.5" width="12" height="9" rx="1.4" fill="currentColor"/>
+          <rect x="-19" y="-2" width="11" height="3.6" fill="currentColor" opacity="0.75"/>
+          <rect x="8" y="-2" width="11" height="3.6" fill="currentColor" opacity="0.75"/>
+          <line x1="0" y1="-4.5" x2="0" y2="-12" stroke="currentColor" stroke-width="1"/>
+          <circle cx="0" cy="-13" r="1.3" fill="currentColor"/>
+        </g>
+        <g transform="translate(52,104) rotate(-52)">
+          <path d="M0,-29 C4.5,-20.5 4.5,-8.5 4.5,0 L-4.5,0 C-4.5,-8.5 -4.5,-20.5 0,-29 Z" fill="currentColor"/>
+          <path d="M-4.5,-5 L-11,3.5 L-4.5,0 Z" fill="currentColor" opacity="0.85"/>
+          <path d="M4.5,-5 L11,3.5 L4.5,0 Z" fill="currentColor" opacity="0.85"/>
+          <circle cx="0" cy="-20.5" r="1.7" fill="var(--bg)" opacity="0.9"/>
+          <path d="M-3.4,0 C-1.7,6.8 0,12 0,17 C0,12 1.7,6.8 3.4,0 Z" fill="var(--accent)" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="brand">
+      <div class="eyebrow">Korea Space &amp; Aerospace · Daily Ops Board</div>
+      <h1>K-스페이스 <em>브리핑</em></h1>
+      <div class="sub">국내 우주항공 연구·사업화·기업 동향과 NASA·JAXA·ESA·CNSA 등 해외 우주기관·기업 소식을 정부·출연연, 기업 IR, R&amp;D·특허, 언론, 해외 동향 5개 채널에서 매일 모아 정리합니다.</div>
+    </div>
+    <div class="status">
+      <span class="live-pill"><span class="live-dot"></span>매일 자동 갱신</span>
+      <span class="date">2026.10.19 (월) 기준 · KST</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="tile">
+      <div class="num">15</div>
+      <div class="label">오늘 수집된 소식</div>
+    </div>
+    <div class="tile">
+      <div class="num accent">D-1</div>
+      <div class="label"><b>JAXA 'MMX'</b> 10.20 다네가시마 발사 예정</div>
+    </div>
+    <div class="tile">
+      <div class="num">5</div>
+      <div class="label">추적 중인 소스 채널</div>
+    </div>
+    <div class="tile">
+      <div class="num mono" style="font-size:20px;">09:15</div>
+      <div class="label">마지막 자동 업데이트</div>
+    </div>
+  </div>
+
+  <section class="cat gov">
+    <div class="cat-head">
+      <span class="cat-rail" style="background:var(--rail-gov);"></span>
+      <h2>정부 · 출연연</h2>
+      <span class="cat-count">3건</span>
+      <span class="cat-desc">우주항공청 · 국정감사</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://www.fnnews.com/news/202610131054230394" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">파이낸셜뉴스</span><span>·</span><span>2026.10.13</span></div>
+        <h3>오태석 우주청장 "메탄연료 재사용발사체, 2028년 시연체 개발"</h3>
+        <p>오태석 우주항공청장은 국정감사에서 메탄을 연료로 쓰는 재사용 발사체의 기초 기술을 2028년 12m급 시연체로 선보이고, 2032년까지 하드웨어 개발을 완성하겠다고 밝혔다. 같은 해 달 탐사 임무에 재사용 발사체 기술을 활용한다는 계획도 제시했으며, 방위사업청과의 사업 지연 지적에는 갈등을 조율해 시너지를 내겠다고 답했다.</p>
+      </a>
+      <a class="card" href="https://www.dailian.co.kr/news/view/1701118/2026-%EA%B5%AD%EA%B0%90-%EC%9A%B0%EC%A3%BC%EC%B2%AD%EC%9E%A5-%EB%8F%85%EC%9E%90-%EC%9C%84%EC%84%B1%ED%86%B5%EC%8B%A0-2026" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">데일리안</span><span>·</span><span>2026.10.13</span></div>
+        <h3>[2026국감] 우주청장 "독자 위성통신망 구축, 해외 발사체 활용 불가피"</h3>
+        <p>오태석 청장은 저궤도 위성통신망 구축의 최대 제약이 발사체라고 짚었다. 정부는 2035년까지 128~512기의 위성을 쏠 계획이지만, 2033~2035년 차세대발사체로는 7회 발사에 약 62기만 궤도에 올릴 수 있어 해외 발사체 활용이 불가피하다는 분석이다. 연 1회인 누리호 발사 횟수를 늘려 다회 발사 체제로 전환해야 한다고 강조했다.</p>
+      </a>
+      <a class="card" href="https://view.asiae.co.kr/article/2026101310294509914" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">아시아경제</span><span>·</span><span>2026.10.13</span></div>
+        <h3>[2026국감] 우주청 "누리호 발사 신뢰도 90% 이상으로 높일 것"</h3>
+        <p>우주항공청장은 국정감사에서 현재 80% 수준인 누리호 발사 신뢰도를 반복 발사를 통해 90% 이상으로 끌어올리겠다고 밝혔다. 우주정책의 중심을 연구개발에서 민간 주도 산업 육성으로 옮기고, 재사용 가능한 차세대 발사체 개발과 2035년까지 저궤도 위성통신망 구축을 추진한다는 계획이다.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat corp">
+    <div class="cat-head">
+      <span class="cat-rail" style="background:var(--rail-corp);"></span>
+      <h2>기업 발표 · IR</h2>
+      <span class="cat-count">3건</span>
+      <span class="cat-desc">KAI · 인텔리안테크 · 뉴스페이스 스타트업</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://www.g-enews.com/article/Industry/2026/10/20261012144527712ea14faf6f5_1" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">글로벌이코노믹</span><span>·</span><span>2026.10.12</span></div>
+        <h3>KAI, 위성 개발 '원스톱' 체계 구축…우주센터 인프라 완성</h3>
+        <p>한국항공우주산업(KAI)은 경남 사천 본사 우주센터에 전자파·음향 챔버를 추가 구축해 위성 설계부터 환경시험까지 자체 수행할 수 있는 체계를 완성했다고 밝혔다. 지난해 구축한 민간 최대 규모 4톤급 열진공 챔버까지 더해져 대형 위성 6기·초소형 위성 20기 이상을 동시에 제작할 수 있으며, 2022년 이후 약 20개 중소기업이 이곳에서 100건 이상의 환경시험을 수행했다.</p>
+      </a>
+      <a class="card" href="https://www.chickstockfi.com/disclosures/20261008900539" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">공시(DART)</span><span>·</span><span>2026.10.08</span></div>
+        <h3>인텔리안테크, 891억원 규모 단일판매·공급계약 체결 [기재정정]</h3>
+        <p>인텔리안테크는 글로벌 위성통신사업자와 891억원 규모의 단일판매·공급계약을 체결했다고 정정 공시했다. 이는 최근 매출액 대비 29.2% 수준으로, 앞서 9월 발표한 국방용 위성통신 단말기 공급 계약에 이어 민간·국방 양쪽에서 위성 안테나 수주를 이어가는 흐름이다.</p>
+      </a>
+      <a class="card" href="https://www.hankyung.com/article/2026101670881" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">한국경제</span><span>·</span><span>2026.10.16</span></div>
+        <h3>스타트업 군단, 누리호 발사 참여…민간 주도 '뉴스페이스' 개막</h3>
+        <p>민간 주도로 처음 진행된 누리호 5차 발사에는 국내 기업 약 300곳이 참여했으며, 이 중 나라스페이스테크놀로지·코스모비·스텝랩·인터그래비티테크놀로지·스페이스린텍·인세라솔루션 등 6개 스타트업이 위성 본체 제작과 핵심 부품 공급, 큐브위성 개발을 맡아 국산 우주부품의 기술 실증 성과를 보였다.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat rnd">
+    <div class="cat-head">
+      <span class="cat-rail" style="background:var(--rail-rnd);"></span>
+      <h2>R&amp;D · 특허 · 사업공고</h2>
+      <span class="cat-count">3건</span>
+      <span class="cat-desc">조달청 · 우주항공청 · AWS</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://www.jodaleconomy.com/news/articleView.html?idxno=3398" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">조달경제신문</span><span>·</span><span>공고 10.22 예정</span></div>
+        <h3>다목적실용위성 8호 탑재체 개발, 2385억원 초대형 발주</h3>
+        <p>한국항공우주연구원이 수요기관으로 올린 '다목적실용위성 8호 탑재체 개발' 사업이 협상에 의한 계약으로 2385억원 규모로 발주된다. 10월 19~30일 조달청이 집행하는 물품 입찰 137건(총 3370억원) 가운데 최대 규모로, 전체 집행액의 절반 이상을 차지한다.</p>
+      </a>
+      <a class="card" href="https://www.dailian.co.kr/news/view/1689337/%EC%9A%B0%EC%A3%BC%ED%95%AD%EA%B3%B5%EC%B2%AD-%E2%80%982026-%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4-%ED%95%B4%EC%BB%A4%ED%86%A4-2026" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">데일리안</span><span>·</span><span>마감 11.5</span></div>
+        <h3>우주항공청 '2026 스페이스 해커톤' 참가팀 11월 5일까지 모집</h3>
+        <p>위성정보 활용 아이디어 발굴을 위해 대학생·스타트업·중소기업 재직자를 대상으로 참가팀을 모집하며, 총상금 3500만원을 걸고 11월 11일 예선·25일 본선을 진행한다.</p>
+      </a>
+      <a class="card" href="https://www.mt.co.kr/tech/2026/09/14/2026091409102562400" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">머니투데이</span><span>·</span><span>진행중 10.27~11.13</span></div>
+        <h3>메가존·AWS·우주항공청 "AWS 스페이스 액셀러레이터: 한국 2026" 운영</h3>
+        <p>국내 우주·위성 스타트업 15~20개사 선발 절차가 마감됐다. 클라우드·AI 기술 세션과 비즈니스 코칭·투자자 네트워킹을 담은 본 프로그램이 10월 27일부터 11월 13일까지 진행된다.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat news">
+    <div class="cat-head">
+      <span class="cat-rail" style="background:var(--rail-news);"></span>
+      <h2>언론 동향</h2>
+      <span class="cat-count">3건</span>
+      <span class="cat-desc">투자 동향 · 산업 전망</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://www.unicornfactory.co.kr/article/2026101618173920569" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">유니콘팩토리</span><span>·</span><span>2026.10.16</span></div>
+        <h3>"스페이스X는 시작일 뿐"…우주 스타트업에 쏠린 글로벌 자금 사상 '최대'</h3>
+        <p>세라핌 스페이스 보고서에 따르면 올해 3분기 전 세계 우주 스타트업 투자액은 208억 달러로 직전 분기의 약 3배, 분기 기준 역대 최대치를 기록했다. 블루오리진의 100억 달러를 제외해도 108억 달러로 여전히 최대 수준이며, 전체 자금의 80%가 발사체·제조 등 인프라 분야에 몰렸다. 북미가 누적 투자의 약 70%를 차지한 가운데 중국도 분기 기준 최대인 33억 달러를 투입했다.</p>
+      </a>
+      <a class="card" href="https://www.seoul.co.kr/news/plan/forum/forum-future/2026/10/15/20261015013006" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">서울신문</span><span>·</span><span>2026.10.15</span></div>
+        <h3>누리호 이후… 우주강국으로 가는 길 [2026 서울미래컨퍼런스]</h3>
+        <p>오태석 우주항공청장은 서울미래컨퍼런스 기조연설에서 "우주가 국가 경쟁력이 되는 시대"를 주제로 누리호 발사 경험을 공유하고, 2035년까지 한국형 저궤도 위성통신망 구축, 2029년 달 궤도 통신위성 발사, 2032년 달 착륙선·로버 전달 계획을 제시할 예정이다.</p>
+      </a>
+      <a class="card" href="https://www.dailian.co.kr/news/view/1699699/%E2%80%9C%EB%A1%9C%EC%BC%93-%EC%90%88%EB%8B%A4-%EC%9D%B4%EC%A0%9C-%EB%8F%88-%EB%B2%8C-%EC%B0%A8%EB%A1%80%E2%80%9D%EB%88%84%EB%A6%AC%ED%98%B8-2026" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">데일리안</span><span>·</span><span>2026.10.09</span></div>
+        <h3>"로켓은 쐈다, 이제 돈 벌 차례"…누리호 성공 뒤 남은 숙제</h3>
+        <p>누리호 5차 발사로 탑재 위성 15기 중 14기가 목표 궤도에서 분리된 가운데, 해외 언론은 다중 위성 분리 기술을 높이 평가했다. 다만 중국 매체 등은 상업적 신뢰성과 공급망 확보가 과제라고 짚었으며, 기사는 발사 비용 절감과 안정적 일정, 고객 확보를 통한 수익화가 다음 숙제라고 전했다.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="cat global">
+    <div class="cat-head">
+      <span class="cat-rail" style="background:var(--rail-global);"></span>
+      <h2>해외 우주기관 · 기업</h2>
+      <span class="cat-count">3건</span>
+      <span class="cat-desc">JAXA · ESA · CNSA</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://spacewatch.global/2026/10/jaxas-martian-moons-exploration-mmx-mission-set-to-launch-next-tuesday-on-h3-rocket/" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">SpaceWatch.Global</span><span>·</span><span>발사 10.20 예정</span></div>
+        <h3>일본 JAXA, 화성위성 샘플귀환선 'MMX' 10월 20일 H3 로켓으로 발사</h3>
+        <p>JAXA는 화성의 위성 포보스·데이모스를 연구하고 포보스 표면 시료를 2031년 지구로 가져올 MMX 탐사선을 10월 20일 다네가시마 우주센터에서 H3 로켓에 실어 발사할 예정이라고 밝혔다. 독·프 공동개발 소형 로버 '이데픽스'도 함께 싣는다.</p>
+      </a>
+      <a class="card" href="https://www.sciencedaily.com/releases/2026/10/261011211559.htm" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">ESA</span><span>·</span><span>2026.10.12</span></div>
+        <h3>유럽 센티넬-3C, 발사 2주 만에 지구 관측 영상 첫 공개</h3>
+        <p>지난 9월 베가-C로 발사된 유럽우주국의 해양·식생 관측위성 센티넬-3C가 알프스 설경과 그린란드 빙상 등을 담은 첫 영상을 보내왔다. 해수면 높이와 빙상 고도 측정값도 기존 위성 자료와 잘 일치해 장비가 정상 작동함을 확인했으며, 앞으로 5개월간 시험을 거쳐 본격 운용에 들어갈 계획이다.</p>
+      </a>
+      <a class="card" href="https://news.cgtn.com/news/2026-10-10/China-s-Long-March-12-rocket-launches-new-internet-satellite-group-1R7BhlZbO3C/p.html" target="_blank" rel="noopener">
+        <div class="meta"><span class="src">CGTN</span><span>·</span><span>2026.10.10</span></div>
+        <h3>중국 장정-12호, 하이난서 저궤도 인터넷 위성군 27번째 발사</h3>
+        <p>중국이 하이난성 상업우주발사장에서 장정-12호를 발사해 첸판(千帆·Qianfan) 저궤도 인터넷 위성군을 27번째로 궤도에 올렸다. 중국은 국가 주도로 대형 저궤도 통신위성군 구축을 가속화하고 있다.</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span>매일 정해진 시각에 5개 채널을 자동 검색·정리해 이 페이지를 갱신합니다.</span>
+    <span class="tag">v0.6 · 2026.10.19 스냅샷</span>
+  </footer>
+
+</div>
+
+</body></html>
